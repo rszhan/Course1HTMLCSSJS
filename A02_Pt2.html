@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Color Guessing Game</title>
+</head>
+
+<body onload="do_game()">
+    <script>
+        var color = ["aqua", "black", "yellow", "red", "magenta", "purple", "white", "blue", "green"];
+        // var finished = false;
+        var target_color;
+        var guess_counts = 0;
+        var guess_color;
+        var congrats_msg = "";
+
+        function do_game() {
+            do_game_helper();
+            //The callback is required to make the page color change synchronously with the alert msg.
+            //Else you would need to press okay before the page color will change.
+            final_alert(function(){
+                    alert(congrats_msg);
+            });
+        }
+
+        function do_game_helper() {
+            var random_number_integer = Math.floor(Math.random() * color.length);
+            correct = color[random_number_integer];
+            //debug console print
+            console.log("Correct Color: " + correct);
+            alert("The chosen color is " + correct);
+            do {
+                guess_color = prompt("I am thinking of one of these colors:\n\n" + color.join(", ") + 
+                        "\n\n What color am I thinking of?");
+                guess_counts += 1;    
+            } while(!check_guess())
+        }
+
+        function final_alert(callback){
+            setTimeout(function(){
+                congrats_msg = "Congratulations! You have guessed the color! \n\n It took you " + guess_counts + " guesses to finish the game! You can see the color in background.";
+                callback();
+            }, 1);
+        }
+
+        function check_guess() {
+            if (color.indexOf(guess_color) == -1) {
+                alert("Sorry I dont recognise your color. \n\n Please try again.");
+                //debug console print
+                console.log("try: " + guess_counts);
+                return false;
+            } else if (correct < guess_color) {
+                alert("Sorry, your guess is not correct! \n\n Hint: Your color is alphabetically higher than mine. \n\n Please try again.");
+                //debug console print
+                console.log("try: " + guess_counts);
+                return false;
+            } else if (correct > guess_color) {
+                alert("Sorry, your guess is not correct! \n\n Hint: Your color is alphabetically lower than mine. \n\n Please try again.");
+                //debug console print
+                console.log("try: " + guess_counts);
+                return false;
+            }
+            else {
+                //thisBody = document.getElementsByTagName("body")[0];
+                //thisBody.style.background = guess_color;
+                document.body.style.backgroundColor = guess_color;
+                //debug console print
+                console.log("try: " + guess_counts);
+                return true;
+            }
+        }
+    </script> 
+
+</body>
+</html>
